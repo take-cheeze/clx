@@ -24,15 +24,16 @@
 #if defined(_WIN32)
 #include <windows.h>
 #else
+#if defined(__APPLE__)
+#define _XOPEN_SOURCE
+#endif
 #include <ucontext.h>
 #endif
 
 #if defined(_MSC_VER)
 #define CLX_MUSTTAIL
-#elif defined(__has_cpp_attribute)
-#if __has_cpp_attribute(clang::musttail)
-#define CLX_MUSTTAIL [[clang::musttail]]
-#elif __has_cpp_attribute(gnu::musttail)
+#elif defined(__GNUC__) && !defined(__clang__) && defined(__has_cpp_attribute)
+#if __has_cpp_attribute(gnu::musttail)
 #define CLX_MUSTTAIL [[gnu::musttail]]
 #else
 #define CLX_MUSTTAIL
